@@ -140,35 +140,6 @@ def workstream(title: str) -> str:
     return "玩法"
 
 
-def ticktick_items(ticktick_file: Path, reminders_file: Path) -> tuple[list[str], list[str], list[str]]:
-    ticktick = load_json(ticktick_file, {})
-    reminders = load_json(reminders_file, {})
-    created = ticktick.get("created_today", []) if isinstance(ticktick, dict) else []
-    completed = ticktick.get("completed_today", []) if isinstance(ticktick, dict) else []
-    open_items = reminders.get("currently_open", []) if isinstance(reminders, dict) else []
-    def values(items):
-        result = []
-        for item in items:
-            raw_title = item.get("title", "") if isinstance(item, dict) else item
-            title = formalize(raw_title)
-            action_words = ("完成", "处理", "整理", "搜索", "研究", "设计", "生成", "制作", "检查", "修复", "补充", "下载", "安装", "写", "做", "看", "测试", "配置", "更新", "排查", "记录", "跟进")
-            likely_task = len(title) <= 140 and any(word in title for word in action_words)
-            if title and likely_task:
-                result.append(title)
-        return result
-
-    return values(created), values(completed), values(open_items)
-
-
-def next_items(ticktick_file: Path, reminders_file: Path) -> list[str]:
-    created, _, open_items = ticktick_items(ticktick_file, reminders_file)
-    result = []
-    for title in created + open_items:
-        if title not in result:
-            result.append(title)
-    return result[:5]
-
-
 def format_duration(minutes: object) -> str:
     try:
         value = max(1, int(minutes))
@@ -305,11 +276,7 @@ def main() -> int:
     if not projects:
         projects = ["- 无明确持续项目记录。"]
 
-    created, completed, _ = ticktick_items(raw_day / "ticktick.json", raw_day / "reminders.json")
-    next_values = next_items(raw_day / "ticktick.json", raw_day / "reminders.json")
-    next_section = [f"- {value}" for value in next_values] or ["- 无明确下一步记录。"]
-    if completed:
-        today_lines.append(f"- **任务管理**：完成 {formalize('、'.join(completed), 120)}")
+    next_section = ["- 无明确下一步记录。"]
     hours = legacy_hours(report_file) or estimate_hours(raw_day / "activity.jsonl")
     if hours.startswith(("约", "大约", "估算为")):
         hours = re.sub(r"^(约|大约|估算为)\s*", "", hours)
