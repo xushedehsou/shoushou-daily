@@ -1,0 +1,5 @@
+{
+  "exclude_apps": ["1Password", "Keychain Access", "System Preferences", "System Settings"],
+  "screenshot_every_n_runs": 3,
+  "idle_skip_seconds": 240
+}

@@ -1,0 +1,10 @@
+raw/
+logs/
+reports/
+.DS_Store
+__pycache__/
+.playwright-cli/
+*.pyc
+.env
+.env.*
+*session*.json
