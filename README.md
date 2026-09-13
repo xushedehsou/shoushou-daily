@@ -51,7 +51,7 @@ Demo 使用合成数据，但使用的就是实际日报的 Markdown 结构和 H
     export SHOUSHOU_ROOT="$HOME/shoushou-daily"
     bash "$SHOUSHOU_ROOT/scripts/generate_report.sh"
 
-没有 Codex、Codex 连接超时或模型没有按约定写出日报时，会自动使用本地保守回退：只依据窗口活动、会话元数据、截图清单和 TickTick 快照生成，不会因此读取更多私人数据。
+没有 Codex、Codex 连接超时或模型没有按约定写出日报时，会自动使用本地保守回退：只依据窗口活动、会话元数据和截图清单生成，不会因此读取更多私人数据。
 
 单独生成阅读页面：
 
